@@ -11,9 +11,12 @@ axios.get("/get_hikers/3").then(function(response) {
     .catch(function(error) {
         console.log(error);
     });*/
+
+var activeCard = document.getElementById('activeCard')
     
-    
-function transitionCards() {
-  document.getElementById('img').className = 'classname';
+function previousCard() {
+    var styl = activeCard.style;
+    activeCard.setAttribute("style", "animation: shootLeft .5s linear 1;");
+    setTimeout(function() { activeCard.setAttribute("style", styl); }, 711);
 }
 

@@ -10,18 +10,18 @@
 
 </head>
 
-<body><div class='top-menu'>
+<body>
+    <div id="activeCard">
+        
+        <div class='top-menu'>
             <div class="nav-control dblines">
                 <div class="nav-icon-container">
                     <p class="nav-bar-icon menu-item">Home</p>
-                    <p class="nav-bar-icon menu-item">Explore</p>
-                    <p class="nav-bar-icon menu-item">About</p>
+                    <p class="nav-bar-icon menu-item">Home</p>
+                    <p class="nav-bar-icon menu-item">Home</p>
                 </div>
             </div>
         </div>
-    <div id="activeCard">
-        
-        
         <div class="card-group">
             <div class="big-card">
                 <div class="card cover">
@@ -60,15 +60,6 @@
             </div>
         </div>
     </div>
-        <div class='nav-controls'>
-            <div class="nav-control btn-inv-x" onclick="previousCard();"><a></a></div>
-            <div class="nav-control dblines">
-                <div style="width:50%;height:33%; border:1px solid white;border-width:0px 0px 1px 0px;"></div>
-                <h3 style="color:white;">Browse Recent</h3>
-                <div style="width:50%;height:33%; border:1px solid white;border-width:1px 0px 0px 0px;"></div>
-            </div>
-            <div class="nav-control btn"><a></a></div><br>
-        </div>
 </body>
 <script src="{{ url_for('static', filename='get.js') }}"></script>
 

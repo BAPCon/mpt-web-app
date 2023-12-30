@@ -5,12 +5,15 @@ body {
     /*background-image: url('/static/pexel3.jpg');*/
     background-color: #dfdfdf;
     background-size: contain;
+    overflow-x: hidden;
   }
   
   .card-group,
   .card{
     aspect-ratio: 14/9;
-    border-radius: 8px;
+    border-radius: 2px;
+    
+  box-shadow: 0px 0px 6px rgba(110,110,110,.3);
   }
   
   .card-group,
@@ -65,29 +68,39 @@ body {
   .card {
     position: absolute;
     width: 60vmin;
+    border-radius: 10px;
     background-color: #222222;
   }
   
   .card-group:hover>.big-card>.cover{
-    box-shadow: 0px -2px 4px rgba(0,0,0,1);
     background-color: black;
     opacity: .5;
     transition: opacity 400ms;
     transition-delay: 200ms;
   }
   .cover{
-    background-image: url('https://missingpersonpublicbucket.s3.amazonaws.com/thumbnails/d77946a7-2d69-45f1-9e4d-e91a4d23984d.jpg');
-    background-origin: border-box;
-    background-size: cover;
+    background-image: url('wfw.png');
+    
+    background-size: 100% 100%;
     opacity: 1.0;
     z-index: 10;
     color: black;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    box-shadow: 0px 0px 15px rgba(0,0,0,0.8);
   }
   
+  .category-button {
+    z-index: 11;
+    width: auto;
+    background-color: blue;
+    border-radius: 4px;
+    text-align: center;
+    color: white;
+    font-weight: 400;
+    margin: 8px;
+    padding: 0 6px 0 6px;
+  }
   
   .card, h3{
     text-align: center;
@@ -107,14 +120,19 @@ body {
     width: 60vmin;
   }
   
+  .top-menu {
+    width: 20%;
+    padding: 2vmin;
+    margin: auto;
+  }
   
   .nav-controls{
     aspect-ratio: 10/2;
     bottom: 25%;
-    width: 55vmin;
+    width: 45vmin;
+    margin: auto;
     display: flex;
-    background-color: #cfcfcf;
-    padding: 1vmin;
+    padding: .5vmin;
     border-radius: 25px;
   }
   .nav-control{
@@ -161,6 +179,11 @@ body {
     display: flex;
     width: 100%;
     margin: auto;
+  }
+  
+  .nav-icon-container .menu-item{
+    width: 33%;
+    margin: 0 10px 0 10px;
   }
   
   
@@ -297,22 +320,65 @@ body {
     }
 
     20% {
-     opacity: .9;
+     opacity: .5;
     }
 
-    100% {
+    49% {
      opacity: 0;
+     transform: translate(-100%);
+    }
+    50% {
+     transform: translate(100%);
+     opacity: 0;
+    }
+    
+    70% {
+      transform: translate(25%);
+    }
+    
+    100% {
+      
+     opacity: 1;
+     transform: translate(0%);
     }
 }
 
+@keyframes cardFlyIn {
+    0% {
+     opacity: 0;
+     
+    }
 
-#activeCard {
-  animation: fadeIn 1s linear 1;
+    20% {
+     opacity: .5;
+    }
+
+    100% {
+     opacity: 1;
+     transform: translate(0);
+    }
+}
+
+.shootLeftAnimation {
+  animation: shootLeft 1.5s linear 1;
+}
+
+#incomingCard {
+  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  height: 60vh;
+  height: 60vmin;
+  transform: translate(40%);
+}
+
+#activeCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 60vmin;
 }
 
 #coverTitle{
@@ -337,8 +403,20 @@ body {
 .title-bar {
   width: 100%;
   margin: auto;
-  box-shadow: 0px 0px 3px rgba(0,0,0,1);
   background-color: rgba(243, 243, 243, 1);
-  border-radius: inherit;
-  border-radius: 0px 0px 10px 10px;
+  
+  
+    border-radius: 0 0 10px 10px;
+}
+
+.text-details {
+  color: #cccccc;
+  padding: 2px 5% 0 5%;
+  
+  max-height: 50%;
+  overflow-y: auto;
+}
+
+.text-details span {
+  color: #ffffff;
 }
