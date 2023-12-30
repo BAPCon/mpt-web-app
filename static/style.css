@@ -1,0 +1,344 @@
+body {
+    margin: 0;
+    font-family: 'Abel';
+    animation: fadeIn 1s linear 1;;
+    /*background-image: url('/static/pexel3.jpg');*/
+    background-color: #dfdfdf;
+    background-size: contain;
+  }
+  
+  .card-group,
+  .card{
+    aspect-ratio: 14/9;
+    border-radius: 8px;
+  }
+  
+  .card-group,
+  .big-card{
+    width: 60vmin;
+    z-index: 10!important;
+    position: relative;
+  }
+  
+  .card-group{
+    transition-delay: 0ms;
+  }
+  
+  .card-group:hover>.big-card{
+    transform: translateX(-110%) rotate(-6deg);
+    background-color: black;
+    transition: transform 600ms cubic-bezier(.05,.43,.25,.95);
+  }
+  
+  .card-group:hover>.big-card>div{
+    color:rgba(0,0,0,.5);
+    transition: color 400ms;
+    transition-delay: 200ms;
+  }
+  
+  .card-group:hover> .content-container{
+    border-width: 1px;
+    transition: width 1020ms cubic-bezier(.05,.43,.25,.95);
+  }
+  
+  .card-group:hover>div>.content{
+    transition-duration: 500ms;
+    opacity: 1.0;
+  }
+  
+  .content-container{
+    border: 0px solid;
+    border-color: rgba(250,250,250,0.1);
+  }
+  
+  .content {
+    opacity: 0;
+    padding: 10px;
+    color: white;
+  }
+  
+  .card-group>div{
+    transition: transform 800ms cubic-bezier(.05,.43,.25,.95);
+  }
+  
+
+  .card {
+    position: absolute;
+    width: 60vmin;
+    background-color: #222222;
+  }
+  
+  .card-group:hover>.big-card>.cover{
+    box-shadow: 0px -2px 4px rgba(0,0,0,1);
+    background-color: black;
+    opacity: .5;
+    transition: opacity 400ms;
+    transition-delay: 200ms;
+  }
+  .cover{
+    background-image: url('https://missingpersonpublicbucket.s3.amazonaws.com/thumbnails/d77946a7-2d69-45f1-9e4d-e91a4d23984d.jpg');
+    background-origin: border-box;
+    background-size: cover;
+    opacity: 1.0;
+    z-index: 10;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.8);
+  }
+  
+  
+  .card, h3{
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+  }
+  .card> h5 {
+    margin: 0px;
+    padding: 0px;
+  }
+  
+  .card-group, .card{
+    transition: transform 800ms cubic-bezier(.05,.43,.25,.95);
+  }
+  
+  .big-card {
+    width: 60vmin;
+  }
+  
+  
+  .nav-controls{
+    aspect-ratio: 10/2;
+    bottom: 25%;
+    width: 55vmin;
+    display: flex;
+    background-color: #cfcfcf;
+    padding: 1vmin;
+    border-radius: 25px;
+  }
+  .nav-control{
+    display:flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    /*border: 1px solid #ffffff22;*/
+    border-collapse: collapse;
+    
+  }
+  
+  .nav-control>a{
+    
+    aspect: 1 / 1;
+    margin: auto;
+    height: 6vh;
+    width: 6vh;
+    --width: 6vh;
+    background-image: url("/static/arrow.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  
+  .nav-controls>div:nth-child(1){
+    margin: auto;
+    transform: scaleX(-1);
+  }
+  .nav-controls>div:nth-child(2){
+    width: 70%;
+  }
+  .nav-controls>div:nth-child(3){
+    margin: auto;
+    border-radius: 5vh;
+  }
+  
+  .nav-bar-icon {
+    
+    width: 33%;
+    text-align: center;
+  }
+  
+  .nav-icon-container{
+    display: flex;
+    width: 100%;
+    margin: auto;
+  }
+  
+  
+  .nav-icon-desc{
+    position: absolute;
+    width: 30%;
+    left: 35%;
+    transform: translateY(30px);
+    text-align: center;
+    display: flex;
+  }
+  
+  .nav-icon-desc>p {
+    color:red;
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+    text-align: center;
+  }
+  
+  
+  .dblines {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .hideElement {
+    animation: fadeOut .6s linear 1;;
+  }
+  
+  .showElement {
+    animation: fadeIn .6s linear 1;;
+  }
+  
+  .btnIcon {
+    padding: 5px;
+    transition-duration: 500ms;
+  }
+  
+  .nav-icon-label {
+    opacity: 0;
+    transition-duration: 350ms;
+  }
+  
+  .nav-bar-icon:hover>.btnIcon {
+    transform: translateY(-50%);
+    transition-duration: 500ms;
+  }
+  .nav-bar-icon:hover>.nav-icon-label{
+    opacity: 1;
+    transition-delay: 150ms;
+    transition-duration: 350ms;
+  }
+  
+  .btn:hover {
+    border-radius: 7vh;
+    animation: pulseRight .5s linear 1;
+  }
+  
+  .btn-inv-x:hover {
+    animation: pulseLeft .5s linear 1;
+  }
+  
+  
+  
+  @keyframes pulseRight {
+    0% {
+     transform: scale(1, 1);
+    }
+
+    50% {
+     transform: scale(1.1, 1.1);
+    }
+
+    100% {
+    transform: scale(1, 1);
+    }
+}
+
+  @keyframes pulseLeft {
+    0% {
+     transform: scale(-1, 1);
+    }
+
+    50% {
+     transform: scale(-1.1, 1.1);
+    }
+
+    100% {
+    transform: scale(-1, 1);
+    }
+}
+
+  @keyframes fadeIn {
+    0% {
+     opacity: 0;
+    }
+
+    20% {
+     opacity: 0;
+    }
+
+    100% {
+     opacity: 1;
+    }
+}
+
+.nav-icon-label{
+  position: absolute;
+  display:inline;
+  transform: translateX(-100%);
+  color:white;
+}
+
+  @keyframes fadeOut {
+    0% {
+     opacity: 0;
+    }
+
+    20% {
+     opacity: 0;
+    }
+
+    100% {
+     opacity: 1;
+    }
+}
+
+@keyframes shootLeft {
+    0% {
+     opacity: 1;
+     
+    }
+
+    20% {
+     opacity: .9;
+    }
+
+    100% {
+     opacity: 0;
+    }
+}
+
+
+#activeCard {
+  animation: fadeIn 1s linear 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 60vh;
+}
+
+#coverTitle{
+  
+    padding: 5px;
+}
+
+#coverSubtitle {
+  margin: 0px;
+  font-weight: 500;
+    padding: 5px;
+}
+
+  .title-bar{
+    
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+    position: absolute;
+    bottom: 0%;
+  }
+.title-bar {
+  width: 100%;
+  margin: auto;
+  box-shadow: 0px 0px 3px rgba(0,0,0,1);
+  background-color: rgba(243, 243, 243, 1);
+  border-radius: inherit;
+  border-radius: 0px 0px 10px 10px;
+}
