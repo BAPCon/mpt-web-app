@@ -1,0 +1,73 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missing Persons Tracker</title>
+    <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+        key: "AIzaSyCR9oZlU9PlXvk8OkTk5BghWHng7U7sEwM",
+        v: "weekly",
+        // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+        // Add other bootstrap parameters as needed, using camel case.
+      });
+    </script>
+</head>
+
+<body><div class='top-menu'>
+            <div class="nav-control dblines">
+                <div class="nav-icon-container">
+                    <p class="nav-bar-icon menu-item">Home</p>
+                    <p class="nav-bar-icon menu-item">Explore</p>
+                    <p class="nav-bar-icon menu-item">About</p>
+                </div>
+            </div>
+        </div>
+    <div class="card-row">
+    <div id="activeCard">
+        
+        <div class="card-group">
+            <div class="big-card">
+            </div>
+            <div class="card content-container">
+                <div class="content">
+                    
+                    <div id='mapDisplay'></div>
+                    <div class="card-title-div">
+                    <h3>Melinda Oakeson</h3>
+                    <h5 style="display:inline;">12/30/2023 - Lake Havasu City, Arizona</h5>
+                    </div>
+                    <h5 class="text-details">Melinda Oakeson, a 46-year-old woman who was reported missing on Oct. 16, was <span>found dead</span> by a group of hikers on a mountainside near <span>Craggy Wash</span>. <br><br>Oakeson had been living out of her vehicle for an undetermined amount of time, and the sheriff's office did not immediately provide details on how she died or how she got to the location.</h5>
+                    <div class="nav-icon-container">
+                    <div class="nav-bar-icon">
+                        <svg id="Map" onclick="window.location.href='https://www.google.com/maps/@34.593494,-114.36186,45m'" height="24" width="24" viewBox="0 0 1024 1024" fill="#f2f2f2" class="btnIcon">
+                            <path d="M640 810v-506l-256-90v506zM874 128q22 0 22 22v644q0 16-16 20l-240 82-256-90-228 88-6 2q-22 0-22-22v-644q0-16 16-20l240-82 256 90 228-88z" class="jsx-3323936745"></path>
+                            <p class="nav-icon-label">Maps</p>
+                        </svg>
+                    </div>
+                    <div class="nav-bar-icon">
+                        <svg id="News" height="24" width="24" viewBox="0 0 1170.2857142857142 1024" fill="#f2f2f2" class="btnIcon">
+                            <path d="M585.143 292.571h-219.429v219.429h219.429v-219.429zM658.286 658.286v73.143h-365.714v-73.143h365.714zM658.286 219.429v365.714h-365.714v-365.714h365.714zM1024 658.286v73.143h-292.571v-73.143h292.571zM1024 512v73.143h-292.571v-73.143h292.571zM1024 365.714v73.143h-292.571v-73.143h292.571zM1024 219.429v73.143h-292.571v-73.143h292.571zM146.286 768v-548.571h-73.143v548.571c0 20 16.571 36.571 36.571 36.571s36.571-16.571 36.571-36.571zM1097.143 768v-621.714h-877.714v621.714c0 12.571-2.286 25.143-6.286 36.571h847.429c20 0 36.571-16.571 36.571-36.571zM1170.286 73.143v694.857c0 60.571-49.143 109.714-109.714 109.714h-950.857c-60.571 0-109.714-49.143-109.714-109.714v-621.714h146.286v-73.143h1024z" class="jsx-3323936745"></path>
+                            <p class="nav-icon-label">News</p>
+                            <!--https://www.google.com/search?q=%22Melinda+Oakeson%22&tbm=nws-->
+                        </svg>
+                    </div>
+                    <div class="nav-bar-icon">
+                        <svg id="Alerts" height="24" width="24" viewBox="0 0 1024 1024" fill="#f2f2f2" class="btnIcon">
+                            <path d="M682 726v-256q0-82-46-137t-124-55-124 55-46 137v256h340zM768 682l86 86v42h-684v-42l86-86v-212q0-100 51-174t141-96v-30q0-26 18-45t46-19 46 19 18 45v30q90 22 141 96t51 174v212zM512 938q-34 0-60-25t-26-59h172q0 34-26 59t-60 25z" class="jsx-3323936745"></path>
+                            <p class="nav-icon-label">Alerts</p>
+                        </svg>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+<script src="{{ url_for('static', filename='get.js') }}"></script>
+
+</html>

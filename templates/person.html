@@ -45,29 +45,21 @@
         </div>
     </div>
     
-    {{data.html}}
+    <script>
+        var person_name = "{{data}}";
+        async function getArticles() {
+            const response = await fetch("/api/hiker/"+person_name);
+            const articles = await response.json();
+            var doc = document.getElementsByTagName('body')[0];
+            for(var x = 0; x < articles.length-2; x++){
+                doc.innerHTML = doc.innerHTML + articles[x];
+            }
+            setMap(articles[articles.length-2], articles[articles.length-1]);
+        }
+        getArticles(person_name)
+    </script>
     
 </body>
 <script src="{{ url_for('static', filename='get.js') }}"></script>
-<script>
-    let map;
-
-    async function initMap() {
-        const { Map } = await google.maps.importLibrary("maps");
-
-        map = new Map(document.getElementById("mapDisplay"), {
-            center: { lat: {{data.lat}}, lng: {{data.lng}} },
-            zoom: 8,
-            mapTypeId: "terrain",
-        });
-        new google.maps.Marker({
-            position: { lat: {{data.lat}}, lng: {{data.lng}} },
-            map,
-            title: "Status",
-        });
-    }
-
-    initMap();
-</script>
 
 </html>

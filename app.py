@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, request, render_template
 import boto3
+import json
 import wptio
+import random
 
 app = Flask(__name__)
 
@@ -9,21 +11,49 @@ def home():
     """
     A homepage route to check if our Flask app is running.
     """
-    return render_template('index.html')
+    hiker = {
+        "person_name": "Benjamin Perkins",
+        "date": "12/01/2023",
+        "location": "Stuart, Florida",
+        "details": "Lorem ipsum bullshit yada yada...",
+        "google_maps_coords": "20.00, 20.00"
+    }
+    return render_template('index.html', data=hiker)
     
-@app.route('/hiker/<string:hiker_key>')
-def hiker_profile(hiker_key):
-    hiker = wptio.get_person(hiker_key)
-    return render_template('hiker.html', hiker=hiker)
+@app.route('/hiker/<string:person_name>')
+def hiker_profile(person_name):
+    return render_template('person.html', data=person_name)
+    
+@app.route('/api/hiker/<string:person_name>')
+def get_person_html(person_name):
+    person = wptio.scan_items_by_person(person_name)
+    '''return render_template('index.html', data = {
+        'html': open('templates/mapless_cards.html','r').read()
+    })'''
+    articles = wptio.sort_articles(person);
+    html_list = []
+    lat = 0;
+    lng = 0;
+    for article in articles:
+        
+        html_list.append(
+            render_template('mapless_cards.html' if len(html_list) > 0 else 'first_card.html', data={
+                "date": article['date_formatted'],
+                "lat": article['geo']['lat_lng']['lat'],
+                "lng": article['geo']['lat_lng']['lng'],
+                'person_name': article['gpt']['person'],
+                'details': article['gpt']['details'],
+                'location': article['gpt']['location']
+            })
+        )
+        if lat == 0:
+            lat = article['geo']['lat_lng']['lat']
+            lng = article['geo']['lat_lng']['lng']
         
     
-@app.route('/get_hikers/<int:amount>')
-def get_hikers(amount):
-    _html = []
-    hikers = wptio._get_hikers(amount)
-    for hiker in hikers:
-        _html.append(render_template('titlecard.html', hiker=hiker))
-    return jsonify(_html)
+    html_list.extend([lat, lng])
+    
+    return jsonify(html_list);
         
         
     

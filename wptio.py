@@ -1,39 +1,62 @@
-from boto3.dynamodb.conditions import Key
-import boto3, random
-from flask import Flask, jsonify, request, render_template
+import boto3
+import json
+from decimal import Decimal
 
-dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
+#Does quasi the same things as json.loads from here: https://pypi.org/project/dynamodb-json/
+class JSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Decimal):
+            return float(obj)
+        return json.JSONEncoder.default(self, obj)
 
-table = dynamodb.Table('missingPersonTableAssets')
+table = None
 
-def scan():
-    return table.scan().get('Items')
+def get_people():
+    global table
 
-def get_person(person_key):
-    """
-    Retrieve a person's data from DynamoDB by person_key
-    """
-    try:
-        # Query DynamoDB to get the person's record by ID
-        response = table.get_item(Key={'person_key': person_key.replace('_',' ').title().replace(' ', '_')})
-        
-        # Check if we got a match
-        if 'Item' in response:
-            person_data = response['Item']
-            person_data['thumbnail'] = "https://missingpersonpublicbucket.s3.amazonaws.com/" + person_data['thumbnail']
-            return person_data
-        else:
-            return jsonify({"error": "Person not found"}), 404
-    except Exception as e:
-        # Handle exception or any errors that occur during the query
-        return jsonify({"error": str(e)}), 500
+    if not table:
+        _resource = boto3.resource('dynamodb')
+        table = _resource.Table('ArticleTable')
+
+    response = table.scan(
+        FilterExpression='attribute_exists(gpt)'
+    )
+
+    # Retrieve items with 'gpt' attribute
+    items_with_gpt = response['Items']
+
+    # If there are more items, handle pagination
+    while 'LastEvaluatedKey' in response:
+        response = table.scan(
+            FilterExpression='attribute_exists(gpt)',
+            ExclusiveStartKey=response['LastEvaluatedKey']
+        )
+        items_with_gpt.extend(response['Items'])
+
+    people = [x['gpt']['person'] for x in items_with_gpt if str(x['gpt']['person']).lower() != 'false']
+
+    return [*set(people)]
+
+def scan_items_by_person(requested_person):
+    global table
+
+    if not table:
+        _resource = boto3.resource('dynamodb')
+        table = _resource.Table('ArticleTable')
+
+    response = table.scan(
+        FilterExpression='attribute_exists(gpt) AND #g.#p = :person_val',
+        ExpressionAttributeNames={
+            '#g': 'gpt',
+            '#p': 'person'
+        },
+        ExpressionAttributeValues={
+            ':person_val': requested_person
+        }
+    )
+
+    return response['Items']
     
+def sort_articles(articles: list):
+    return sorted(articles, key=lambda x: x.get('date_formatted'), reverse=True)
     
-def _get_hikers(amount: int) -> list:
-    response = []
-    items = scan()
-    if len(items) < amount: return items
-    while len(response) < amount:
-            response.append(items.pop(random.randint(0, len(items)-1)))
-            response[-1]['thumbnail'] = "https://missingpersonpublicbucket.s3.amazonaws.com/" + response[-1]['thumbnail'];
-    return response
