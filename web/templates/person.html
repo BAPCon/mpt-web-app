@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Missing Persons Tracker</title>
+    <title>Missing Persons Tracker - Person</title>
     <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -26,7 +26,7 @@
                     a.nonce = m.querySelector("script[nonce]")?.nonce || "";
                     m.head.append(a) }));
             d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
-            key: "AIzaSyCR9oZlU9PlXvk8OkTk5BghWHng7U7sEwM",
+            key: "{{google_api_key}}",
             v: "weekly",
             // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
             // Add other bootstrap parameters as needed, using camel case.
@@ -38,9 +38,9 @@
     <div class='top-menu'>
         <div class="nav-control dblines">
             <div class="nav-icon-container">
-                <p class="nav-bar-icon menu-item">Home</p>
-                <p class="nav-bar-icon menu-item">Explore</p>
-                <p class="nav-bar-icon menu-item">About</p>
+                <a class="nav-bar-icon menu-item" href="/">Home</a>
+                <a class="nav-bar-icon menu-item" href="/map">Map</a>
+                <a class="nav-bar-icon menu-item" href="/">About</a>
             </div>
         </div>
     </div>

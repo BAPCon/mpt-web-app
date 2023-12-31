@@ -1,0 +1,159 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missing Persons Tracker</title>
+    <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<script>
+    (g => {
+        var h, a, k, p = "The Google Maps JavaScript API",
+            c = "google",
+            l = "importLibrary",
+            q = "__ib__",
+            m = document,
+            b = window;
+        b = b[c] || (b[c] = {});
+        var d = b.maps || (b.maps = {}),
+            r = new Set,
+            e = new URLSearchParams,
+            u = () => h || (h = new Promise(async (f, n) => {
+                await (a = m.createElement("script"));
+                e.set("libraries", [...r] + "");
+                for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]);
+                e.set("callback", c + ".maps." + q);
+                a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+                d[q] = f;
+                a.onerror = () => h = n(Error(p + " could not load."));
+                a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+                m.head.append(a)
+            }));
+        d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n))
+    })({
+        key: "{{google_api_key}}",
+        v: "weekly",
+        // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+        // Add other bootstrap parameters as needed, using camel case.
+    });
+</script>
+
+<body>
+    <div class='top-menu'>
+        <div class="nav-control dblines">
+            <div class="nav-icon-container">
+                <a class="nav-bar-icon menu-item" href="/">Home</a>
+                <a class="nav-bar-icon menu-item" href="/map">Map</a>
+                <a class="nav-bar-icon menu-item" href="/">About</a>
+            </div>
+        </div>
+    </div>
+    <div class="map-container">
+        <div id='mapDisplayPage' class="map_page_display"></div>
+        <div class="map-legend">
+            <div class='legend-content'>
+                <h3>Legend:</h3>
+                <div class="legend-key-value">
+                    <img src="/static/icons/update.png" class="legend-icon">
+                    <h4>General information/update</h4>
+                </div>
+                <div class="legend-key-value">
+                    <img src="/static/icons/found.png" class="legend-icon">
+                    <h4>Found Alive</h4>
+                </div>
+                <div class="legend-key-value">
+                    <img src="/static/icons/deceased.png" class="legend-icon">
+                    <h4>Found deceased</h4>
+                </div>
+                <div class="legend-key-value">
+                    <img src="/static/icons/search.png" class="legend-icon">
+                    <h4>Search on-going</h4>
+                </div>
+                <div class="legend-key-value">
+                    <img src="/static/icons/no_search.png" class="legend-icon">
+                    <h4>Search called off</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="{{ url_for('static', filename='svg_markers.js') }}"></script>
+<script src="{{ url_for('static', filename='get.js') }}"></script>
+
+<script>
+    async function loadGlobalMarkers() {
+
+        const { Map } = await google.maps.importLibrary("maps");
+        async function getSvgIcon(svg_path) {
+            return {
+                path: svg_path,
+                fillColor: "blue",
+                fillOpacity: 0.6,
+                strokeWeight: 0,
+                rotation: 0,
+                scale: 2,
+                anchor: new google.maps.Point(0, 20),
+            };
+        }
+
+
+
+        const svgno_search = "M512.002 193.212v-65.212h128v-64c0-35.346-28.654-64-64.002-64h-191.998c-35.346 0-64 28.654-64 64v64h128v65.212c-214.798 16.338-384 195.802-384 414.788 0 229.75 186.25 416 416 416s416-186.25 416-416c0-218.984-169.202-398.448-384-414.788zM706.276 834.274c-60.442 60.44-140.798 93.726-226.274 93.726s-165.834-33.286-226.274-93.726c-60.44-60.44-93.726-140.8-93.726-226.274s33.286-165.834 93.726-226.274c58.040-58.038 134.448-91.018 216.114-93.548l-21.678 314.020c-1.86 26.29 12.464 37.802 31.836 37.802s33.698-11.512 31.836-37.802l-21.676-314.022c81.666 2.532 158.076 35.512 216.116 93.55 60.44 60.44 93.726 140.8 93.726 226.274s-33.286 165.834-93.726 226.274z";
+        const svgsearch = "M64 0h384v64h-384zM576 0h384v64h-384zM952 320h-56v-256h-256v256h-256v-256h-256v256h-56c-39.6 0-72 32.4-72 72v560c0 39.6 32.4 72 72 72h304c39.6 0 72-32.4 72-72v-376h128v376c0 39.6 32.4 72 72 72h304c39.6 0 72-32.4 72-72v-560c0-39.6-32.4-72-72-72zM348 960h-248c-19.8 0-36-14.4-36-32s16.2-32 36-32h248c19.8 0 36 14.4 36 32s-16.2 32-36 32zM544 512h-64c-17.6 0-32-14.4-32-32s14.4-32 32-32h64c17.6 0 32 14.4 32 32s-14.4 32-32 32zM924 960h-248c-19.8 0-36-14.4-36-32s16.2-32 36-32h248c19.8 0 36 14.4 36 32s-16.2 32-36 32z";
+        const svgfound = "M512 554q64 0 140 18t139 60 63 94v128h-684v-128q0-52 63-94t139-60 140-18zM512 170q70 0 120 51t50 121-50 120-120 50-120-50-50-120 50-121 120-51zM512 636q-88 0-174 33t-86 57v46h520v-46q0-24-86-57t-174-33zM512 252q-38 0-64 26t-26 64 26 63 64 25 64-25 26-63-26-64-64-26z";
+        var svgdead = "M896 256h-192v-128c0-35.2-28.8-64-64-64h-256c-35.2 0-64 28.8-64 64v128h-192c-70.4 0-128 57.6-128 128v512c0 70.4 57.6 128 128 128h768c70.4 0 128-57.6 128-128v-512c0-70.4-57.6-128-128-128zM384 128h256v128h-256v-128zM768 704h-192v192h-128v-192h-192v-128h192v-192h128v192h192v128z";
+        const svgupdate = "M470 384v-86h84v86h-84zM512 854q140 0 241-101t101-241-101-241-241-101-241 101-101 241 101 241 241 101zM512 86q176 0 301 125t125 301-125 301-301 125-301-125-125-301 125-301 301-125zM470 726v-256h84v256h-84z";
+
+
+        const response = await fetch("/api/markers")
+        const markers = await response.json();
+
+        function get_svg(marker) {
+            if (marker[2].toLowerCase() == "found_alive") return [svgfound, "green"];
+            if (marker[2].toLowerCase() == "found_dead") return [svgdead, "red"];
+            if (marker[2].toLowerCase() == "general_update") return [svgupdate, "white"];
+            if (marker[2].toLowerCase() == "search_off") return [svgno_search, "yellow"];
+            if (marker[2].toLowerCase() == "search_on") return [svgsearch, "lightblue"];
+        }
+
+        var map = new Map(document.getElementById("mapDisplayPage"), {
+            center: { lat: parseFloat(markers[0][0].lat), lng: parseFloat(markers[0][0].lng) },
+            zoom: 3,
+            mapTypeId: "terrain",
+        });
+
+        for (var xt = 0; xt < markers.length; xt++) {
+            var marker_visual = get_svg(markers[xt]);
+            var marker = new google.maps.Marker({
+                position: { lat: parseFloat(markers[xt][0].lat), lng: parseFloat(markers[xt][0].lng) },
+                icon: {
+                    path: marker_visual[0],
+                    fillColor: marker_visual[1],
+                    fillOpacity: 1,
+                    strokeWeight: 1.5,
+                    rotation: 0,
+                    scale: 2 / 128,
+                    anchor: new google.maps.Point(0, 20),
+                },
+                map,
+                title: "Missing: " + markers[xt][1],
+            });
+            marker.myData = 1;
+            marker.addListener("click", markerClicked)
+        }
+    }
+
+    function markerClicked(event) {
+        window.location.href = "/hiker/" + event.domEvent.srcElement.parentElement.getAttribute("title").split(": ")[1]
+    }
+
+    async function initMapGlobal() {
+
+        loadGlobalMarkers();
+    }
+    initMapGlobal();
+</script>
+
+</html>

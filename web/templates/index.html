@@ -1,0 +1,26 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missing Persons Tracker</title>
+    <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div class='top-menu'>
+        <div class="nav-control dblines">
+            <div class="nav-icon-container">
+                <a class="nav-bar-icon menu-item" href="/">Home</a>
+                <a class="nav-bar-icon menu-item" href="/map">Map</a>
+                <a class="nav-bar-icon menu-item" href="/">About</a>
+            </div>
+        </div>
+    </div>
+    
+</body>
+<script src="{{ url_for('static', filename='get.js') }}"></script>
+
+</html>

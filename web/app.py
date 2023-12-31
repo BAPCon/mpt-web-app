@@ -1,24 +1,29 @@
 from flask import Flask, jsonify, request, render_template
 import boto3
 import json
-import wptio
+import wpt_io as wptio
 import random
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    """
-    A homepage route to check if our Flask app is running.
-    """
-    hiker = {
-        "person_name": "Benjamin Perkins",
-        "date": "12/01/2023",
-        "location": "Stuart, Florida",
-        "details": "Lorem ipsum bullshit yada yada...",
-        "google_maps_coords": "20.00, 20.00"
-    }
-    return render_template('index.html', data=hiker)
+    return render_template('index.html')
+
+@app.route('/map')
+def map_page():
+    people = wptio.get_people()
+    return render_template('map_page.html')
+    
+@app.route('/api/markers')
+def get_markers():
+    markers = wptio.get_markers()
+    return jsonify(markers)
+    
+@app.route("/api/get_people")
+def get_people():
+    people = wptio.get_items()
+    return jsonify(people)
     
 @app.route('/hiker/<string:person_name>')
 def hiker_profile(person_name):
@@ -27,9 +32,6 @@ def hiker_profile(person_name):
 @app.route('/api/hiker/<string:person_name>')
 def get_person_html(person_name):
     person = wptio.scan_items_by_person(person_name)
-    '''return render_template('index.html', data = {
-        'html': open('templates/mapless_cards.html','r').read()
-    })'''
     articles = wptio.sort_articles(person);
     html_list = []
     lat = 0;
@@ -43,7 +45,8 @@ def get_person_html(person_name):
                 "lng": article['geo']['lat_lng']['lng'],
                 'person_name': article['gpt']['person'],
                 'details': article['gpt']['details'],
-                'location': article['gpt']['location']
+                'location': article['gpt']['location'],
+                'thumbnail': article['thumbnail']
             })
         )
         if lat == 0:

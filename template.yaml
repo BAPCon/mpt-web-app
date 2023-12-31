@@ -1,0 +1,65 @@
+Transform: AWS::Serverless-2016-10-31
+Globals:
+  Function:
+    MemorySize: 2048
+    Timeout: 30
+
+Resources:
+
+  pyReaderMpt:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: pyReaderMpt
+      CompatibleRuntimes:
+        - python3.11
+    Metadata:
+      BuildMethod: python3.11
+
+  readerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: readerFunctionMpt
+      CodeUri: Lambda_FunctionsserpReadFunction/
+      Handler: app.lambda_handler
+      Runtime: python3.11
+      Layers:
+        - !Ref pyReaderMpt
+      MemorySize: 1024
+      Timeout: 180
+      Environment:
+        Variables:
+          serp_key: envar
+          openai_key: envar
+          gpt_function_name: !Ref gptAnalyzeFunction
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName: !Ref gptAnalyzeFunction
+
+  gptAnalyzeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: gptAnalyzeFunctionMpt
+      CodeUri: Lambda_FunctionsgptAnalyzeFunction/
+      Handler: app.lambda_handler
+      Runtime: python3.11
+      Layers:
+        - !Ref pyReaderMpt
+      MemorySize: 1024
+      Timeout: 180
+      Environment:
+        Variables:
+          serp_key: envar
+          openai_key: envar
+          geocoding_key: envar
+          table_name: !Ref ArticleTable
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref ArticleTable
+
+  ArticleTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey: 
+        Name: id
+        Type: String
+      TableName: ArticleTable
